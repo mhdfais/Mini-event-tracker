@@ -21,13 +21,11 @@ export const protect = async (
   }
 
   try {
-    // Verify token
     const decoded = jwt.verify(
       token,
       process.env.JWT_SECRET as string
     ) as unknown as JWTPayload;
 
-    // Get user from token
     const user = await User.findById(decoded.id).select('-password');
 
     if (!user) {

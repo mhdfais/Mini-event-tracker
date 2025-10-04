@@ -2,16 +2,7 @@ import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types';
 import Event from '../model/Event';
 
-// interface CreateEventBody {
-//   title: string;
-//   dateTime: Date;
-//   location: string;
-//   description?: string;
-// }
 
-// @desc    Create new event
-// @route   POST /api/events
-// @access  Private
 export const createEvent = async (
   req: AuthRequest,
   res: Response,
@@ -20,7 +11,6 @@ export const createEvent = async (
   try {
     const { title, dateTime, location, description } = req.body;
 
-    // Validation
     if (!title || !dateTime || !location) {
       res.status(400).json({ 
         message: 'Please provide title, date/time, and location' 
@@ -28,7 +18,6 @@ export const createEvent = async (
       return;
     }
 
-    // Create event
     const event = await Event.create({
       user: req.user?.id,
       title,
@@ -43,9 +32,6 @@ export const createEvent = async (
   }
 };
 
-// @desc    Get user's events
-// @route   GET /api/events
-// @access  Private
 export const getEvents = async (
   req: AuthRequest,
   res: Response,
@@ -59,9 +45,6 @@ export const getEvents = async (
   }
 };
 
-// @desc    Get single event
-// @route   GET /api/events/:id
-// @access  Private
 export const getEvent = async (
   req: AuthRequest,
   res: Response,
@@ -87,9 +70,6 @@ export const getEvent = async (
   }
 };
 
-// @desc    Update event
-// @route   PUT /api/events/:id
-// @access  Private
 export const updateEvent = async (
   req: AuthRequest,
   res: Response,
@@ -103,7 +83,6 @@ export const updateEvent = async (
       return;
     }
 
-    // Check ownership
     if (event.user.toString() !== req.user?.id) {
       res.status(403).json({ message: 'Not authorized to update this event' });
       return;
@@ -120,9 +99,7 @@ export const updateEvent = async (
   }
 };
 
-// @desc    Delete event
-// @route   DELETE /api/events/:id
-// @access  Private
+
 export const deleteEvent = async (
   req: AuthRequest,
   res: Response,
@@ -136,7 +113,6 @@ export const deleteEvent = async (
       return;
     }
 
-    // Check ownership
     if (event.user.toString() !== req.user?.id) {
       res.status(403).json({ message: 'Not authorized to delete this event' });
       return;
@@ -150,9 +126,7 @@ export const deleteEvent = async (
   }
 };
 
-// @desc    Get shared event (public)
-// @route   GET /api/events/share/:shareToken
-// @access  Public
+
 export const getSharedEvent = async (
   req: AuthRequest,
   res: Response,
